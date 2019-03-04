@@ -1,0 +1,42 @@
+version: '3.3'
+services:
+  consul-server:
+    image: consul:1.0.2
+    deploy:
+      placement:
+        constraints: [node.labels.host_ip==IP1]
+      replicas: 1
+      restart_policy:
+        delay: 60s
+    networks:
+      - micro-service
+    entrypoint:
+      - consul
+      - agent
+      - -server
+      - -bootstrap #作为一个集群启动
+      - -data-dir=/consul/data
+      - -advertise=IP1
+      - -node=c1
+      - -client=0.0.0.0 #consul服务侦听地址提供HTTP、DNS、RPC等服务，默认是127.0.0.1，对外提供服务需改成0.0.0.0
+      - -ui
+    volumes:
+      - data1:/consul/data
+    ports:
+      - 8300:8300 #agent server 使用的，用于处理其他agent发来的rpc请求
+      - 8301:8301 #Cluster Serf Addr LAN,agent使用此端口处理LAN中的gossip
+      - 8301:8301/udp #
+      - 8302:8302 #Cluster Serf Addr WAN,agent server使用此端口处理WAN中的与其他server的gossip
+      - 8302:8302/udp
+      - 8400:8400 #cli rpc endpoint,agent用于处理从CLI来的RPC请求
+      - 8500:8500 #Web UI, http api
+      - 8600:8600/udp #DNS服务
+
+networks:
+  micro-service:
+    external: true
+volumes:
+  data1:
+
+
+
