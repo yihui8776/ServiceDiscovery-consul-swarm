@@ -7,7 +7,7 @@
 3、创建一个可被普通容器附加的overlay网络，名字为micro-service    
 在swarm的manager节点上执行  
 docker network create --attachable --driver overlay micro-service  
-3、运行sh文件  
+4、运行sh文件  
   
 这只是测试使用基础模板，生产建议增加安全策略，如 Access Control Lists (ACLs) ，  
 另外预留了IP地址，建议增加agent，部署server和client agent 的高可用和负载均衡。   
