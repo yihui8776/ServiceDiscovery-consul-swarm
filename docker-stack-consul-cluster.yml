@@ -9,7 +9,7 @@ services:
           - node.hostname == master
       replicas: 1
       restart_policy:
-        delay: 60s
+        delay: 30s
     networks:
       - micro-service
     entrypoint:
